@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_packages/button_file.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class UrlLaunch extends StatefulWidget {
-  const UrlLaunch({Key? key}) : super(key: key);
+class LaunchUrl extends StatefulWidget {
+  const LaunchUrl({Key? key}) : super(key: key);
 
   @override
-  State<UrlLaunch> createState() => _UrlLaunchState();
+  State<LaunchUrl> createState() => _LaunchUrlState();
 }
 
-class _UrlLaunchState extends State<UrlLaunch> {
+class _LaunchUrlState extends State<LaunchUrl> {
   Future<void> urlLaunch() async {
     const url = "https://maps.google.com";
     final finalUrl = Uri.parse(url);
@@ -52,12 +53,18 @@ class _UrlLaunchState extends State<UrlLaunch> {
       body: Center(
         child: Column(
           children: [
-            ElevatedButton(
-                onPressed: urlLaunch, child: const Text("Launch Url")),
-            ElevatedButton(
-                onPressed: makeCall, child: const Text("Make a call")),
-            ElevatedButton(
-                onPressed: sendMsg, child: const Text("Send a message")),
+            ButtonFile(
+              btnText: 'Launch Url',
+              btnTap: urlLaunch,
+            ),
+            ButtonFile(
+              btnText: 'Make a call',
+              btnTap: makeCall,
+            ),
+            ButtonFile(
+              btnText: 'Send a message',
+              btnTap: sendMsg,
+            ),
           ],
         ),
       ),

@@ -3,18 +3,19 @@ import 'dart:io';
 
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_packages/button_file.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
 
-class Video1Player extends StatefulWidget {
-  const Video1Player({Key? key}) : super(key: key);
+class PlayerVideo extends StatefulWidget {
+  const PlayerVideo({Key? key}) : super(key: key);
 
   @override
-  State<Video1Player> createState() => _Video1PlayerState();
+  State<PlayerVideo> createState() => _PlayerVideoState();
 }
 
-class _Video1PlayerState extends State<Video1Player> {
+class _PlayerVideoState extends State<PlayerVideo> {
   File? video;
   VideoPlayerController? videoPlayerController;
   ChewieController? chewieController;
@@ -87,12 +88,14 @@ class _Video1PlayerState extends State<Video1Player> {
                   ),
                 )
               : const Text("Select The video"),
-          ElevatedButton(
-              onPressed: cameraRequest,
-              child: const Text("Take A video From Camera")),
-          ElevatedButton(
-              onPressed: storageRequest,
-              child: const Text("Take A video From Gallery"))
+          ButtonFile(
+            btnText: 'Take a video From Camera',
+            btnTap: cameraRequest,
+          ),
+          ButtonFile(
+            btnText: 'Take A video From Gallery',
+            btnTap: storageRequest,
+          )
         ]),
       ),
     );

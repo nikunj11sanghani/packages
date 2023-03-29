@@ -1,16 +1,18 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_packages/button_file.dart';
 
-class File1Picker extends StatefulWidget {
-  const File1Picker({Key? key}) : super(key: key);
+class PickerFile extends StatefulWidget {
+  const PickerFile({Key? key}) : super(key: key);
 
   @override
-  State<File1Picker> createState() => _File1PickerState();
+  State<PickerFile> createState() => _PickerFileState();
 }
 
-class _File1PickerState extends State<File1Picker> {
+class _PickerFileState extends State<PickerFile> {
   // PlatformFile? file;
   File? lastFile;
   FilePickerResult? filePickerResult;
@@ -23,11 +25,11 @@ class _File1PickerState extends State<File1Picker> {
     if (filePickerResult != null) {
       PlatformFile file = filePickerResult!.files.first;
       lastFile = File(file.path.toString());
-      print(file.path);
-      print(file.size);
-      print(file.name);
-      print(file.bytes);
-      print(file.extension);
+      log("${file.path}");
+      log("${file.size}");
+      log(file.name);
+      log("${file.bytes}");
+      log("${file.extension}");
     }
   }
 
@@ -39,8 +41,10 @@ class _File1PickerState extends State<File1Picker> {
         child: Column(
           children: [
             Center(
-              child: TextButton(
-                  onPressed: takeFile, child: const Text("Pick File")),
+              child: ButtonFile(
+                btnText: 'Pick File',
+                btnTap: takeFile,
+              ),
             ),
           ],
         ),

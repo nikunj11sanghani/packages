@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_packages/image_picker.dart';
+import 'package:flutter_packages/picker_image.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Image1Picker(),
+      home: const PickerImage(),
     );
   }
 }
