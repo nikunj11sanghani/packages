@@ -17,7 +17,7 @@ class PickerImage extends StatefulWidget {
   State<PickerImage> createState() => _PickerImageState();
 }
 
-class _PickerImageState extends State<PickerImage> {
+class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
   File? image1;
 
   Future<void> takeImage(ImageSource source) async {
@@ -30,7 +30,7 @@ class _PickerImageState extends State<PickerImage> {
         image1 = imagePath;
       });
     } catch (e) {
-      print(e);
+      log("$e");
     }
   }
 
@@ -60,15 +60,21 @@ class _PickerImageState extends State<PickerImage> {
     }
   }
 
-  requiredPermission() async {
-    PermissionStatus firstPermission = await Permission.camera.request();
-    PermissionStatus secondPermission = await Permission.storage.request();
-    if (firstPermission.isGranted && secondPermission.isGranted) {
+  compulsoryPermission() async {
+    PermissionStatus firstPermission = await Permission.camera.status;
+    // PermissionStatus secondPermission = await Permission.storage.request();
+    if (!firstPermission.isGranted) {
+      await Permission.camera.request();
+      // await Permission.storage.request();
+    }
+    // firstPermission = await Permission.camera.status;
+    if (firstPermission.isGranted) {
       return;
     } else {
-      // ignore: use_build_context_synchronously
+      if (context.mounted) return;
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
             actions: [
@@ -76,14 +82,9 @@ class _PickerImageState extends State<PickerImage> {
                   onPressed: () async {
                     await openAppSettings();
                   },
-                  child: const Text("Yes")),
-              OutlinedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("No")),
+                  child: const Text("Open Settings")),
             ],
-            title: const Text("Permission Required"),
+            title: const Text("Permission Camera"),
           );
         },
       );
@@ -92,15 +93,26 @@ class _PickerImageState extends State<PickerImage> {
 
   @override
   void initState() {
-    requiredPermission();
+    compulsoryPermission();
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (await Permission.camera.status.isGranted) {
+      if (context.mounted) return;
+      Navigator.pop(context);
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
   void dispose() {
-    requiredPermission().dispose();
+    compulsoryPermission().dispose();
     cameraRequest().dispose();
     storageRequest().dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
