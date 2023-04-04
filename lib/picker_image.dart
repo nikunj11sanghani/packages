@@ -1,5 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'dart:developer';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_packages/button_file.dart';
 import 'package:flutter_packages/cached_network.dart';
@@ -11,6 +13,8 @@ import 'package:flutter_packages/picker_file.dart';
 import 'package:flutter_packages/player_video.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import 'notificationservice/local_notification_service.dart';
 
 class PickerImage extends StatefulWidget {
   const PickerImage({Key? key}) : super(key: key);
@@ -58,8 +62,40 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
   @override
   void initState() {
     compulsoryPermission(false);
-    Firebase.initializeApp();
     WidgetsBinding.instance.addObserver(this);
+    FirebaseCrashlytics.instance.setCustomKey("Check", "Crash");
+    FirebaseMessaging.instance.getInitialMessage().then(
+      (message) {
+        log("FirebaseMessaging.instance.getInitialMessage");
+        if (message != null) {
+          log("New Notification");
+        }
+      },
+    );
+    FirebaseMessaging.onMessage.listen(
+      //forGround
+      (message) {
+        log("FirebaseMessaging.onMessage.listen");
+        if (message.notification != null) {
+          log("${message.notification!.title}");
+          log("${message.notification!.body}");
+          log("message.data11 ${message.data}");
+          LocalNotificationService.createanddisplaynotification(message);
+        }
+      },
+    );
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      //backGround
+      (message) {
+        final keyValue = message.data['Open App'];
+        log(keyValue);
+        if (message.notification != null) {
+          log("${message.notification!.title}");
+          log("${message.notification!.body}");
+          log("message.data22 ${message.data['_id']}");
+        }
+      },
+    );
     super.initState();
   }
 

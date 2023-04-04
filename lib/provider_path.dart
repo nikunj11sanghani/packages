@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class _ProviderPathState extends State<ProviderPath> {
   Future<File> localPath() async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File("${directory.path}/first_file.txt");
-    print(directory.path);
+    log(directory.path);
     return file;
   }
 
