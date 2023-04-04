@@ -1,13 +1,15 @@
-import 'dart:developer';
-import 'dart:io';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_packages/button_file.dart';
+import 'package:flutter_packages/cached_network.dart';
+import 'package:flutter_packages/image_package.dart';
 import 'package:flutter_packages/launch_url.dart';
+import 'package:flutter_packages/loading_package.dart';
+import 'package:flutter_packages/location_page.dart';
 import 'package:flutter_packages/picker_file.dart';
 import 'package:flutter_packages/player_video.dart';
-import 'package:flutter_packages/provider_path.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PickerImage extends StatefulWidget {
@@ -18,60 +20,17 @@ class PickerImage extends StatefulWidget {
 }
 
 class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
-  File? image1;
+  bool isFromStorage = false;
 
-  Future<void> takeImage(ImageSource source) async {
-    try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return;
-
-      final imagePath = File(image.path);
-      setState(() {
-        image1 = imagePath;
-      });
-    } catch (e) {
-      log("$e");
-    }
-  }
-
-  cameraRequest() async {
-    PermissionStatus cameraStatus = await Permission.camera.request();
-    if (cameraStatus == PermissionStatus.granted) {
-      takeImage(ImageSource.camera);
-    }
-    if (cameraStatus == PermissionStatus.denied) {
-      log("Permission Required");
-    }
-    if (cameraStatus == PermissionStatus.permanentlyDenied) {
-      openAppSettings();
-    }
-  }
-
-  storageRequest() async {
-    PermissionStatus storageStatus = await Permission.storage.request();
-    if (storageStatus == PermissionStatus.granted) {
-      takeImage(ImageSource.gallery);
-    }
-    if (storageStatus == PermissionStatus.denied) {
-      log("Permission Required");
-    }
-    if (storageStatus == PermissionStatus.permanentlyDenied) {
-      openAppSettings();
-    }
-  }
-
-  compulsoryPermission() async {
+  compulsoryPermission(bool isFromStorage) async {
     PermissionStatus firstPermission = await Permission.camera.status;
-    // PermissionStatus secondPermission = await Permission.storage.request();
     if (!firstPermission.isGranted) {
       await Permission.camera.request();
-      // await Permission.storage.request();
     }
-    // firstPermission = await Permission.camera.status;
     if (firstPermission.isGranted) {
       return;
     } else {
-      if (context.mounted) return;
+      // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -80,7 +39,12 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
             actions: [
               OutlinedButton(
                   onPressed: () async {
+                    isFromStorage = true;
                     await openAppSettings();
+                    if (await Permission.camera.isGranted) {
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
+                    }
                   },
                   child: const Text("Open Settings")),
             ],
@@ -93,25 +57,25 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    compulsoryPermission();
+    compulsoryPermission(false);
+    Firebase.initializeApp();
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (await Permission.camera.status.isGranted) {
-      if (context.mounted) return;
-      Navigator.pop(context);
+    if (state == AppLifecycleState.resumed) {
+      if (await Permission.camera.status.isGranted && isFromStorage) {
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      }
     }
     super.didChangeAppLifecycleState(state);
   }
 
   @override
   void dispose() {
-    compulsoryPermission().dispose();
-    cameraRequest().dispose();
-    storageRequest().dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -125,26 +89,14 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
       body: Center(
         child: Column(
           children: [
-            InkWell(
-              onTap: () {},
-              child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: image1 != null
-                    ? Image.file(
-                        height: 100,
-                        width: 100,
-                        image1!,
-                      )
-                    : const Text("Select Image"),
-              ),
-            ),
             ButtonFile(
-              btnText: 'Take Image from Camera',
-              btnTap: cameraRequest,
-            ),
-            ButtonFile(
-              btnText: 'Take Image from Gallery',
-              btnTap: storageRequest,
+              btnText: 'Image Package',
+              btnTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ImagePackage()));
+              },
             ),
             ButtonFile(
               btnText: 'Video Player Page',
@@ -167,10 +119,12 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
             ButtonFile(
               btnText: 'Path Provider',
               btnTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProviderPath()));
+                FirebaseCrashlytics.instance.crash();
+
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => const ProviderPath()));
               },
             ),
             ButtonFile(
@@ -180,9 +134,72 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                     MaterialPageRoute(builder: (context) => const LaunchUrl()));
               },
             ),
+            ButtonFile(
+              btnText: 'Cached Network Image',
+              btnTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CachedNetwork()));
+              },
+            ),
+            ButtonFile(
+              btnText: 'GeoLocator',
+              btnTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LocationPage()));
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ButtonFile(
+                  btnText: 'Default Toast',
+                  btnTap: defaultToast,
+                ),
+                ButtonFile(
+                  btnText: 'Custom Toast',
+                  btnTap: customToast,
+                ),
+              ],
+            ),
+            ButtonFile(
+              btnText: 'Easy Loading',
+              btnTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoadingCustom()));
+              },
+            ),
           ],
         ),
       ),
     );
+  }
+
+  defaultToast() async {
+    Fluttertoast.showToast(
+        msg: "Default Toast Message",
+        fontSize: 15,
+        textColor: Colors.white,
+        backgroundColor: Colors.black,
+        gravity: ToastGravity.BOTTOM);
+  }
+
+  customToast() async {
+    FToast fToast = FToast();
+    fToast.init(context);
+    Widget toast = Container(
+      height: 50,
+      decoration: BoxDecoration(
+          color: Colors.deepOrange, borderRadius: BorderRadius.circular(10)),
+      child: Row(
+        children: const [Icon(Icons.done_all), Text("Custom Toast Message")],
+      ),
+    );
+    fToast.showToast(child: toast, toastDuration: const Duration(seconds: 3));
   }
 }
