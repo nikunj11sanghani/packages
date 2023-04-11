@@ -214,13 +214,6 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                     MaterialPageRoute(builder: (context) => const StoreFile()));
               },
             ),
-            ButtonFile(
-              btnText: 'Dio Package ',
-              btnTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const StoreFile()));
-              },
-            ),
           ],
         ),
       ),
