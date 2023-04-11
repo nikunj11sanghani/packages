@@ -4,7 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotificationService {
-  static final FlutterLocalNotificationsPlugin _notificationsPlugin =
+  static final FlutterLocalNotificationsPlugin notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   static void initialize() {
@@ -13,33 +13,32 @@ class LocalNotificationService {
         InitializationSettings(
       android: AndroidInitializationSettings("@mipmap/ic_launcher"),
     );
-    _notificationsPlugin.initialize(
+    notificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: (id) async {
-        log("onSelectNotification");
-        log("Router Value1234 $id");
+      onDidReceiveNotificationResponse: (message) async {
+        log("$message");
       },
     );
   }
 
-  static void createanddisplaynotification(RemoteMessage message) async {
+  static void displayNotification(RemoteMessage message) async {
     try {
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       const NotificationDetails notificationDetails = NotificationDetails(
         android: AndroidNotificationDetails(
-          "pushnotificationapp",
-          "pushnotificationappchannel",
+          "packages",
+          "notification",
           importance: Importance.max,
           priority: Priority.high,
         ),
       );
 
-      await _notificationsPlugin.show(
+      await notificationsPlugin.show(
         id,
         message.notification!.title,
         message.notification!.body,
         notificationDetails,
-        payload: message.data['_id'],
+        payload: message.data['data'],
       );
     } on Exception catch (e) {
       log("$e");

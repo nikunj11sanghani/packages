@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_packages/button_file.dart';
 import 'package:flutter_packages/cached_network.dart';
 import 'package:flutter_packages/image_package.dart';
+import 'package:flutter_packages/info_package.dart';
 import 'package:flutter_packages/launch_url.dart';
 import 'package:flutter_packages/loading_package.dart';
 import 'package:flutter_packages/location_page.dart';
 import 'package:flutter_packages/picker_file.dart';
 import 'package:flutter_packages/player_video.dart';
+import 'package:flutter_packages/store_file.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -24,35 +26,27 @@ class PickerImage extends StatefulWidget {
 }
 
 class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
-  bool isFromStorage = false;
-
-  compulsoryPermission(bool isFromStorage) async {
+  compulsoryPermission() async {
     PermissionStatus firstPermission = await Permission.camera.status;
     if (!firstPermission.isGranted) {
       await Permission.camera.request();
-    }
-    if (firstPermission.isGranted) {
+    } else if (firstPermission.isGranted) {
       return;
     } else {
       // ignore: use_build_context_synchronously
       showDialog(
         context: context,
-        barrierDismissible: false,
+        // barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
             actions: [
               OutlinedButton(
                   onPressed: () async {
-                    isFromStorage = true;
                     await openAppSettings();
-                    if (await Permission.camera.isGranted) {
-                      // ignore: use_build_context_synchronously
-                      Navigator.of(context).pop();
-                    }
                   },
                   child: const Text("Open Settings")),
             ],
-            title: const Text("Permission Camera"),
+            title: const Text("Permission Required"),
           );
         },
       );
@@ -60,10 +54,20 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
   }
 
   @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      if (await Permission.camera.status.isGranted) {}
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
   void initState() {
-    compulsoryPermission(false);
+    compulsoryPermission();
     WidgetsBinding.instance.addObserver(this);
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FirebaseCrashlytics.instance.setCustomKey("Check", "Crash");
+    //terminated
     FirebaseMessaging.instance.getInitialMessage().then(
       (message) {
         log("FirebaseMessaging.instance.getInitialMessage");
@@ -72,20 +76,20 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
         }
       },
     );
+    //forGround
     FirebaseMessaging.onMessage.listen(
-      //forGround
       (message) {
         log("FirebaseMessaging.onMessage.listen");
         if (message.notification != null) {
-          log("${message.notification!.title}");
-          log("${message.notification!.body}");
-          log("message.data11 ${message.data}");
-          LocalNotificationService.createanddisplaynotification(message);
+          log("notification title${message.notification!.title}");
+          log("notification body${message.notification!.body}");
+          log("message.data ${message.data}");
+          LocalNotificationService.displayNotification(message);
         }
       },
     );
+    //backGround
     FirebaseMessaging.onMessageOpenedApp.listen(
-      //backGround
       (message) {
         final keyValue = message.data['Open App'];
         log(keyValue);
@@ -97,17 +101,6 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
       },
     );
     super.initState();
-  }
-
-  @override
-  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.resumed) {
-      if (await Permission.camera.status.isGranted && isFromStorage) {
-        // ignore: use_build_context_synchronously
-        Navigator.pop(context);
-      }
-    }
-    super.didChangeAppLifecycleState(state);
   }
 
   @override
@@ -188,18 +181,13 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                         builder: (context) => const LocationPage()));
               },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ButtonFile(
-                  btnText: 'Default Toast',
-                  btnTap: defaultToast,
-                ),
-                ButtonFile(
-                  btnText: 'Custom Toast',
-                  btnTap: customToast,
-                ),
-              ],
+            ButtonFile(
+              btnText: 'Default Toast',
+              btnTap: defaultToast,
+            ),
+            ButtonFile(
+              btnText: 'Custom Toast',
+              btnTap: customToast,
             ),
             ButtonFile(
               btnText: 'Easy Loading',
@@ -208,6 +196,29 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const LoadingCustom()));
+              },
+            ),
+            ButtonFile(
+              btnText: 'Information',
+              btnTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const InfoPackages()));
+              },
+            ),
+            ButtonFile(
+              btnText: 'Fire Store',
+              btnTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const StoreFile()));
+              },
+            ),
+            ButtonFile(
+              btnText: 'Dio Package ',
+              btnTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const StoreFile()));
               },
             ),
           ],

@@ -2,22 +2,23 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_packages/button_file.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class ImagePackage extends StatefulWidget {
-  const ImagePackage({Key? key}) : super(key: key);
+class ImageStore extends StatefulWidget {
+  const ImageStore({Key? key}) : super(key: key);
 
   @override
-  State<ImagePackage> createState() => _ImagePackageState();
+  State<ImageStore> createState() => _ImageStoreState();
 }
 
-class _ImagePackageState extends State<ImagePackage>
-    with WidgetsBindingObserver {
+class _ImageStoreState extends State<ImageStore> {
+  bool isLoading = true;
   File? image1;
-  bool isFromStorage = false;
 
   Future<void> takeImage(ImageSource source) async {
     try {
@@ -27,6 +28,7 @@ class _ImagePackageState extends State<ImagePackage>
       final imagePath = File(image.path);
       setState(() {
         image1 = imagePath;
+        log(image1!.path);
       });
     } catch (e) {
       log("$e");
@@ -59,64 +61,27 @@ class _ImagePackageState extends State<ImagePackage>
     }
   }
 
-  // compulsoryPermission(bool isFromStorage) async {
-  //   PermissionStatus firstPermission = await Permission.camera.status;
-  //   // PermissionStatus secondPermission = await Permission.storage.request();
-  //   if (!firstPermission.isGranted) {
-  //     await Permission.camera.request();
-  //     // await Permission.storage.request();
-  //   }
-  //   // firstPermission = await Permission.camera.status;
-  //   if (firstPermission.isGranted) {
-  //     return;
-  //   } else {
-  //     // ignore: use_build_context_synchronously
-  //     showDialog(
-  //       context: context,
-  //       barrierDismissible: false,
-  //       builder: (context) {
-  //         return AlertDialog(
-  //           actions: [
-  //             OutlinedButton(
-  //                 onPressed: () async {
-  //                   isFromStorage = true;
-  //                   if (await Permission.camera.isGranted) {
-  //                     // ignore: use_build_context_synchronously
-  //                     Navigator.of(context).pop();
-  //                   }
-  //                   await openAppSettings();
-  //                 },
-  //                 child: const Text("Open Settings")),
-  //           ],
-  //           title: const Text("Permission Camera"),
-  //         );
-  //       },
-  //     );
-  //   }
-  // }
-
-  @override
-  void initState() {
-    // compulsoryPermission(false);
-    WidgetsBinding.instance.addObserver(this);
-    super.initState();
-  }
-
-  @override
-  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.resumed) {
-      if (await Permission.camera.status.isGranted && isFromStorage) {
-        // ignore: use_build_context_synchronously
-        Navigator.pop(context);
-      }
-    }
-    super.didChangeAppLifecycleState(state);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
+  Future<void> storeImage(File image1) async {
+    Reference reference = FirebaseStorage.instance.ref().child("images/img");
+    showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          children: [
+            Center(
+              child: Column(
+                children: const [
+                  CircularProgressIndicator(),
+                  Text("Uploading.....")
+                ],
+              ),
+            )
+          ],
+        );
+      },
+    );
+    await reference.putFile(image1);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -153,6 +118,12 @@ class _ImagePackageState extends State<ImagePackage>
                       name: "Image Gallery",
                       parameters: {"Package": "Gallery"});
                   storageRequest();
+                }),
+            ButtonFile(
+                btnText: 'Upload Image',
+                btnTap: () {
+                  storeImage(image1!).whenComplete(() =>
+                      Fluttertoast.showToast(msg: "Image Uploading done"));
                 }),
           ],
         ),
