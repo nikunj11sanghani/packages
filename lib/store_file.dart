@@ -2,12 +2,15 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_packages/button_file.dart';
 import 'package:flutter_packages/image_store.dart';
+import 'package:flutter_packages/signin_screen.dart';
 import 'package:flutter_packages/stored_data.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 
 class StoreFile extends StatefulWidget {
@@ -54,130 +57,181 @@ class _StoreFileState extends State<StoreFile> {
   final addUserNameController = TextEditingController();
   final updateUserNameController = TextEditingController();
 
+  Future<void> logInWithGoogle() async {
+    GoogleSignInAccount? googleSignInAccount = await GoogleSignIn().signIn();
+    // This prompts the user to sign in with their Google account using the Google Sign-In API.
+    // Initializes global sign-in configuration settings.
+    GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount!
+            .authentication; //If the sign-in process was successful, we retrieve the user's authentication credentials.
+    AuthCredential credential = GoogleAuthProvider.credential(
+      //create an AuthCredential object using the Google authentication tokens stored in googleSignInAuthentication.
+      //AuthCredential= Interface that represents the credentials returned by an auth provider.
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+    UserCredential userCredential = await FirebaseAuth
+        .instance //entry point of the Firebase Authentication SDK
+        .signInWithCredential(
+            credential); //We sign in to Firebase using the Google credential created in the previous step, and store the result in userCredential.
+    log(userCredential.user!.email.toString());
+    log(userCredential.user!.displayName.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Fire Store Data"),
       ),
-      body: Form(
-        key: formKey,
-        child: SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 10, left: 10, top: 18.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(30),
-                    child: image1 == null
-                        ? const Text("You have not selected any Image")
-                        : Image.file(
-                            height: 100,
-                            width: 200,
-                            image1!,
+      body: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasData) {
+              return const SignInScreen();
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text("Something went wrong"),
+              );
+            } else {
+              return Form(
+                key: formKey,
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(right: 10, left: 10, top: 18.0),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(30),
+                            child: image1 == null
+                                ? const Text("You have not selected any Image")
+                                : Image.file(
+                                    height: 100,
+                                    width: 200,
+                                    image1!,
+                                  ),
                           ),
+                          TextButton(
+                              onPressed: takeImage,
+                              child: const Text("Select Image")),
+                          TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Enter Some Text";
+                              }
+                              return null;
+                            },
+                            controller: idController,
+                            decoration: InputDecoration(
+                                hintText: "Id",
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10))),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Enter Some Text";
+                              }
+                              return null;
+                            },
+                            controller: addUserNameController,
+                            decoration: InputDecoration(
+                                hintText: "Username",
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10))),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          ButtonFile(
+                            btnText: "Login With Google",
+                            btnTap: () {
+                              logInWithGoogle();
+                            },
+                          ),
+                          ButtonFile(
+                            btnTap: () async {
+                              final picUrl = await storeImage(image1!);
+                              if (formKey.currentState!.validate() &&
+                                  image1 != null) {
+                                await demo.add({
+                                  "Name": addUserNameController.text,
+                                  "id": idController.text,
+                                  "profile": picUrl,
+                                }).whenComplete(() =>
+                                    Fluttertoast.showToast(msg: "User Added"));
+                                idController.clear();
+                                addUserNameController.clear();
+                                setState(() {
+                                  image1 = null;
+                                });
+                                storeImage(image1!);
+                              }
+                            },
+                            btnText: "Add User",
+                          ),
+                          ButtonFile(
+                            btnTap: () async {
+                              if (formKey.currentState!.validate() &&
+                                  image1 != null) {
+                                final picUrl = await storeImage(image1!);
+                                await demo.doc("rmrGWABYczu9UsiTrEmi").update({
+                                  "Name": addUserNameController.text,
+                                  "id": idController.text,
+                                  "profile": picUrl,
+                                });
+                                // addUserNameController.clear();
+                              }
+                            },
+                            btnText: 'Update User',
+                          ),
+                          ButtonFile(
+                            btnTap: () async {
+                              await demo.doc("CibRPPxSpVhz86StzJ4A").delete();
+                            },
+                            btnText: 'Delete Button',
+                          ),
+                          ButtonFile(
+                            btnTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const StoredData()));
+                            },
+                            btnText: 'Show Data',
+                          ),
+                          ButtonFile(
+                            btnTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ImageStore()));
+                            },
+                            btnText: 'Add Image',
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  TextButton(
-                      onPressed: takeImage, child: const Text("Select Image")),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Enter Some Text";
-                      }
-                      return null;
-                    },
-                    controller: idController,
-                    decoration: InputDecoration(
-                        hintText: "Id",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Enter Some Text";
-                      }
-                      return null;
-                    },
-                    controller: addUserNameController,
-                    decoration: InputDecoration(
-                        hintText: "Username",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  ButtonFile(
-                    btnTap: () async {
-                      final picUrl = await storeImage(image1!);
-                      if (formKey.currentState!.validate() && image1 != null) {
-                        await demo.add({
-                          "Name": addUserNameController.text,
-                          "id": idController.text,
-                          "profile": picUrl,
-                        }).whenComplete(
-                            () => Fluttertoast.showToast(msg: "User Added"));
-                        idController.clear();
-                        addUserNameController.clear();
-                        setState(() {
-                          image1 = null;
-                        });
-                        storeImage(image1!);
-                      }
-                    },
-                    btnText: "Add User",
-                  ),
-                  ButtonFile(
-                    btnTap: () async {
-                      if (formKey.currentState!.validate() && image1 != null) {
-                        final picUrl = await storeImage(image1!);
-                        await demo.doc("rmrGWABYczu9UsiTrEmi").update({
-                          "Name": addUserNameController.text,
-                          "id": idController.text,
-                          "profile": picUrl,
-                        });
-                        // addUserNameController.clear();
-                      }
-                    },
-                    btnText: 'Update User',
-                  ),
-                  ButtonFile(
-                    btnTap: () async {
-                      await demo.doc("CibRPPxSpVhz86StzJ4A").delete();
-                    },
-                    btnText: 'Delete Button',
-                  ),
-                  ButtonFile(
-                    btnTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const StoredData()));
-                    },
-                    btnText: 'Show Data',
-                  ),
-                  ButtonFile(
-                    btnTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ImageStore()));
-                    },
-                    btnText: 'Add Image',
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+                ),
+              );
+            }
+          }),
     );
   }
 }

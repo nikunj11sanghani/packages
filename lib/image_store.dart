@@ -17,7 +17,6 @@ class ImageStore extends StatefulWidget {
 }
 
 class _ImageStoreState extends State<ImageStore> {
-  bool isLoading = true;
   File? image1;
 
   Future<void> takeImage(ImageSource source) async {
@@ -63,7 +62,9 @@ class _ImageStoreState extends State<ImageStore> {
 
   Future<void> storeImage(File image1) async {
     Reference reference = FirebaseStorage.instance.ref().child("images/img");
+
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return SimpleDialog(
