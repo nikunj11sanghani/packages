@@ -33,6 +33,7 @@ class PickerImage extends StatefulWidget {
 
 class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
   final localAuthentication = LocalAuthentication();
+  bool hasEnrolled = true;
 
   Future<bool> checkBiometric() async {
     final List<BiometricType> availableBiometrics =
@@ -43,10 +44,16 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
   }
 
   Future<bool> authenticate() async {
-    // LocalAuthentication localAuthentication = LocalAuthentication();
     try {
       if (!await checkBiometric()) {
         return false;
+      }
+      final List<BiometricType> availableBiometrics =
+          await localAuthentication.getAvailableBiometrics();
+      if (availableBiometrics.isEmpty) {
+        setState(() {
+          hasEnrolled = false;
+        });
       }
       return await localAuthentication.authenticate(
           localizedReason: "Required",
@@ -290,19 +297,22 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                           builder: (context) => const AnimatedOpacityTask()));
                 },
               ),
-              ButtonFile(
-                btnText: 'Local Authentication',
-                btnTap: () async {
-                  bool isAvailable = await authenticate();
-                  if (isAvailable) {
-                    if (mounted) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LocalAuthTask()));
+              Visibility(
+                visible: hasEnrolled,
+                child: ButtonFile(
+                  btnText: 'Local Authentication',
+                  btnTap: () async {
+                    bool isAvailable = await authenticate();
+                    if (isAvailable) {
+                      if (mounted) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LocalAuthTask()));
+                      }
                     }
-                  }
-                },
+                  },
+                ),
               ),
             ],
           ),
