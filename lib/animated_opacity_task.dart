@@ -43,8 +43,14 @@ class _AnimatedOpacityState extends State<AnimatedOpacityTask> {
               padding: EdgeInsets.all(paddingVal),
               duration: const Duration(seconds: 3),
               child: Container(
-                height: MediaQuery.of(context).size.height / 4,
-                width: MediaQuery.of(context).size.width,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height / 4,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
                 color: Colors.deepOrange,
               ),
             ),
@@ -58,7 +64,7 @@ class _AnimatedOpacityState extends State<AnimatedOpacityTask> {
             AnimatedSwitcher(
 
               duration: const Duration(milliseconds: 500),
-              child: Text("$count",key: ValueKey(count)),
+              child: Text("$count", key: ValueKey(count)),
 
             ),
             OutlinedButton(

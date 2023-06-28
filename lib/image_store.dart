@@ -67,14 +67,11 @@ class _ImageStoreState extends State<ImageStore> {
       barrierDismissible: false,
       context: context,
       builder: (context) {
-        return SimpleDialog(
+        return const SimpleDialog(
           children: [
             Center(
               child: Column(
-                children: const [
-                  CircularProgressIndicator(),
-                  Text("Uploading.....")
-                ],
+                children: [CircularProgressIndicator(), Text("Uploading.....")],
               ),
             )
           ],
@@ -82,7 +79,9 @@ class _ImageStoreState extends State<ImageStore> {
       },
     );
     await reference.putFile(image1);
-    Navigator.of(context).pop();
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override

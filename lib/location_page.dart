@@ -19,15 +19,18 @@ class _LocationPageState extends State<LocationPage>
       showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: const Text("Please Allow Location Permission"),
-            actions: [
-              TextButton(
-                  onPressed: () async {
-                    await openAppSettings();
-                  },
-                  child: const Text("Ok"))
-            ],
+          return WillPopScope(
+            onWillPop: () async => false,
+            child: AlertDialog(
+              title: const Text("Please Allow Location Permission"),
+              actions: [
+                TextButton(
+                    onPressed: () async {
+                      await openAppSettings();
+                    },
+                    child: const Text("Ok"))
+              ],
+            ),
           );
         },
       );
@@ -44,7 +47,10 @@ class _LocationPageState extends State<LocationPage>
     if (state == AppLifecycleState.resumed) {
       if (p == LocationPermission.whileInUse ||
           p == LocationPermission.always) {
-        Navigator.of(context).pop();
+        if(mounted){
+          Navigator.of(context).pop();
+
+        }
       }
     }
     super.didChangeAppLifecycleState(state);

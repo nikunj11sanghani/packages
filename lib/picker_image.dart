@@ -12,12 +12,14 @@ import 'package:flutter_packages/info_package.dart';
 import 'package:flutter_packages/intl_package.dart';
 import 'package:flutter_packages/launch_url.dart';
 import 'package:flutter_packages/loading_package.dart';
+import 'package:flutter_packages/local_auth_task.dart';
 import 'package:flutter_packages/location_page.dart';
 import 'package:flutter_packages/picker_file.dart';
 import 'package:flutter_packages/player_video.dart';
 import 'package:flutter_packages/store_file.dart';
 import 'package:flutter_packages/tween_animation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'notificationservice/local_notification_service.dart';
@@ -30,6 +32,35 @@ class PickerImage extends StatefulWidget {
 }
 
 class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
+  final localAuthentication = LocalAuthentication();
+
+  Future<bool> checkBiometric() async {
+    final List<BiometricType> availableBiometrics =
+        await localAuthentication.getAvailableBiometrics();
+    log(availableBiometrics.toString());
+    return await localAuthentication.canCheckBiometrics ||
+        await localAuthentication.isDeviceSupported();
+  }
+
+  Future<bool> authenticate() async {
+    // LocalAuthentication localAuthentication = LocalAuthentication();
+    try {
+      if (!await checkBiometric()) {
+        return false;
+      }
+      return await localAuthentication.authenticate(
+          localizedReason: "Required",
+          options: const AuthenticationOptions(
+            biometricOnly: true,
+            stickyAuth: true,
+            useErrorDialogs: true,
+          ));
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
+
   compulsoryPermission() async {
     PermissionStatus firstPermission = await Permission.camera.status;
     if (!firstPermission.isGranted) {
@@ -257,6 +288,20 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const AnimatedOpacityTask()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'Local Authentication',
+                btnTap: () async {
+                  bool isAvailable = await authenticate();
+                  if (isAvailable) {
+                    if (mounted) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LocalAuthTask()));
+                    }
+                  }
                 },
               ),
             ],
