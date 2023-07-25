@@ -1,28 +1,31 @@
 import 'dart:developer';
-
+import 'package:flutter_packages/shimmer_task.dart';
+import 'package:flutter_packages/screens/sliver_task.dart';
+import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_ios/local_auth_ios.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_packages/animated_opacity_task.dart';
-import 'package:flutter_packages/button_file.dart';
-import 'package:flutter_packages/cached_network.dart';
-import 'package:flutter_packages/hero_animation.dart';
-import 'package:flutter_packages/image_package.dart';
-import 'package:flutter_packages/info_package.dart';
-import 'package:flutter_packages/intl_package.dart';
-import 'package:flutter_packages/launch_url.dart';
-import 'package:flutter_packages/loading_package.dart';
-import 'package:flutter_packages/local_auth_task.dart';
-import 'package:flutter_packages/location_page.dart';
-import 'package:flutter_packages/picker_file.dart';
-import 'package:flutter_packages/player_video.dart';
-import 'package:flutter_packages/store_file.dart';
-import 'package:flutter_packages/tween_animation.dart';
+import 'package:flutter_packages/screens/animated_opacity_task.dart';
+import 'package:flutter_packages/widgets/button_file.dart';
+import 'package:flutter_packages/screens/cached_network.dart';
+import 'package:flutter_packages/screens/hero_animation.dart';
+import 'package:flutter_packages/screens/image_package.dart';
+import 'package:flutter_packages/screens/info_package.dart';
+import 'package:flutter_packages/screens/intl_package.dart';
+import 'package:flutter_packages/screens/launch_url.dart';
+import 'package:flutter_packages/screens/loading_package.dart';
+import 'package:flutter_packages/screens/local_auth_task.dart';
+import 'package:flutter_packages/screens/location_page.dart';
+import 'package:flutter_packages/screens/picker_file.dart';
+import 'package:flutter_packages/screens/player_video.dart';
+import 'package:flutter_packages/screens/store_file.dart';
+import 'package:flutter_packages/screens/tween_animation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'notificationservice/local_notification_service.dart';
+import '../notificationservice/local_notification_service.dart';
 
 class PickerImage extends StatefulWidget {
   const PickerImage({Key? key}) : super(key: key);
@@ -48,6 +51,7 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
       if (!await checkBiometric()) {
         return false;
       }
+
       final List<BiometricType> availableBiometrics =
           await localAuthentication.getAvailableBiometrics();
       if (availableBiometrics.isEmpty) {
@@ -57,6 +61,15 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
       }
       return await localAuthentication.authenticate(
           localizedReason: "Required",
+          authMessages: <AuthMessages>[
+            const AndroidAuthMessages(
+              signInTitle: 'Oops! Biometric authentication required!',
+              cancelButton: 'No thanks',
+            ),
+            const IOSAuthMessages(
+              cancelButton: 'No thanks',
+            ),
+          ],
           options: const AuthenticationOptions(
             biometricOnly: true,
             stickyAuth: true,
@@ -75,23 +88,24 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
     } else if (firstPermission.isGranted) {
       return;
     } else {
-      // ignore: use_build_context_synchronously
-      showDialog(
-        context: context,
-        // barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            actions: [
-              OutlinedButton(
-                  onPressed: () async {
-                    await openAppSettings();
-                  },
-                  child: const Text("Open Settings")),
-            ],
-            title: const Text("Permission Required"),
-          );
-        },
-      );
+      if (mounted) {
+        showDialog(
+          context: context,
+          // barrierDismissible: false,
+          builder: (context) {
+            return AlertDialog(
+              actions: [
+                OutlinedButton(
+                    onPressed: () async {
+                      await openAppSettings();
+                    },
+                    child: const Text("Open Settings")),
+              ],
+              title: const Text("Permission Required"),
+            );
+          },
+        );
+      }
     }
   }
 
@@ -313,6 +327,24 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                     }
                   },
                 ),
+              ),
+              ButtonFile(
+                btnText: 'Sliver Task',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SliverTask()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'Shimmer Effect',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ShimmerTask()));
+                },
               ),
             ],
           ),

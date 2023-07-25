@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_packages/button_file.dart';
+import 'package:flutter_packages/widgets/button_file.dart';
 
 class LoadingCustom extends StatefulWidget {
   const LoadingCustom({Key? key}) : super(key: key);
