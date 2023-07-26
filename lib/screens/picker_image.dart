@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter_packages/screens/phone_screen.dart';
 import 'package:flutter_packages/shimmer_task.dart';
 import 'package:flutter_packages/screens/sliver_task.dart';
 import 'package:local_auth_android/local_auth_android.dart';
@@ -172,8 +173,13 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
         title: const Text("Image Picker"),
       ),
       body: Center(
-        child: SingleChildScrollView(
-          child: Column(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GridView.count(
+            padding: const EdgeInsets.all(20),
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+            crossAxisCount: 3,
             children: [
               ButtonFile(
                 btnText: 'Image Package',
@@ -344,6 +350,15 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const ShimmerTask()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'Pin Code Screen',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PhoneScreen()));
                 },
               ),
             ],

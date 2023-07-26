@@ -9,8 +9,11 @@ class ButtonFile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 250,
-        child: ElevatedButton(onPressed: btnTap, child: Text(btnText)));
+    return ElevatedButton(
+        onPressed: btnTap,
+        child: Text(
+          btnText,
+          textAlign: TextAlign.center,
+        ));
   }
 }
