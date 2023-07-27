@@ -2,7 +2,8 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_packages/screens/pin_code_screen.dart';
+
+import '../routes.dart';
 
 class PhoneScreen extends StatefulWidget {
   const PhoneScreen({Key? key}) : super(key: key);
@@ -137,15 +138,20 @@ class _PhoneScreenState extends State<PhoneScreen> {
                                   id = verificationId;
                                 });
                                 if (mounted) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => PinCodeScreen(
-                                          currentText: currenntText,
-                                          verificationId: id,
-                                          phoneNumber: phoneController.text,
-                                        ),
-                                      ));
+                                  Navigator.pushNamed(
+                                      context,Routes.pinCodeScreen,arguments: {
+                                    "currentText": currenntText,
+                                    "verificationId": verificationId,
+                                    "phoneNumber": phoneController.text,
+                                  }
+                                      // MaterialPageRoute(
+                                      //   builder: (context) => PinCodeScreen(
+                                      //     currentText: currenntText,
+                                      //     verificationId: id,
+                                      //     phoneNumber: phoneController.text,
+                                      //   ),
+                                      // )
+                                );
                                 }
                               },
                               codeAutoRetrievalTimeout: (verificationId) {},

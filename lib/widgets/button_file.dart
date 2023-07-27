@@ -12,6 +12,7 @@ class ButtonFile extends StatelessWidget {
     return ElevatedButton(
         onPressed: btnTap,
         child: Text(
+          style: const TextStyle(fontSize: 10),
           btnText,
           textAlign: TextAlign.center,
         ));

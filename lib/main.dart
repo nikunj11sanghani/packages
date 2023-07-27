@@ -6,7 +6,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_packages/notificationservice/local_notification_service.dart';
+import 'package:flutter_packages/routes.dart';
 import 'package:flutter_packages/screens/picker_image.dart';
+
+import 'navigation_manager.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   log(message.data.toString());
@@ -28,6 +31,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: Routes.pickerImage,
+      onGenerateRoute: NavigationManager.onGenerateRoute,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
