@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'package:flutter_packages/screens/isolate_threads/isolate_screen.dart';
+import 'package:flutter_packages/screens/isolate_threads/thread_screen.dart';
 import 'package:flutter_packages/shimmer_task.dart';
-import 'package:flutter_packages/screens/sliver_task.dart';
+import 'package:flutter_packages/screens/isolate_threads/sliver_task.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 import 'package:local_auth_ios/local_auth_ios.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -344,6 +346,24 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const ShimmerTask()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'Isolate',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const IsolateScreen()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'Thread Screen',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ThreadScreen()));
                 },
               ),
             ],
