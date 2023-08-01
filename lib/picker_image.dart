@@ -13,6 +13,7 @@ import 'package:flutter_packages/intl_package.dart';
 import 'package:flutter_packages/launch_url.dart';
 import 'package:flutter_packages/loading_package.dart';
 import 'package:flutter_packages/location_page.dart';
+import 'package:flutter_packages/lottie_animation.dart';
 import 'package:flutter_packages/picker_file.dart';
 import 'package:flutter_packages/player_video.dart';
 import 'package:flutter_packages/store_file.dart';
@@ -257,6 +258,15 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const AnimatedOpacityTask()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'Lottie Animation',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LottieAnimation()));
                 },
               ),
             ],
