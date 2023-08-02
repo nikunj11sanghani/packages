@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_packages/screens/isolate_threads/list_view_task.dart';
-import 'package:flutter_packages/screens/isolate_threads/sliver_performance.dart';
 import 'package:flutter_packages/widgets/button_file.dart';
+
+import '../../routes.dart';
 
 class ThreadScreen extends StatefulWidget {
   const ThreadScreen({Key? key}) : super(key: key);
@@ -24,21 +24,25 @@ class _ThreadScreenState extends State<ThreadScreen> {
             ButtonFile(
               btnText: "ListView",
               btnTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ListViewExample(),
-                    ));
+                Navigator.pushNamed(context, Routes.listViewExample);
               },
             ),
             ButtonFile(
               btnText: "Slivers",
               btnTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SliverPerformance(),
-                    ));
+                Navigator.pushNamed(context, Routes.sliverPerformance);
+              },
+            ),
+            ButtonFile(
+              btnText: "Staggered Grid",
+              btnTap: () {
+                Navigator.pushNamed(context, Routes.staggeredGridViewTask);
+              },
+            ),
+            ButtonFile(
+              btnText: "Smooth Page Indicator",
+              btnTap: () {
+                Navigator.pushNamed(context, Routes.smoothPageIndicatorTask);
               },
             ),
           ],

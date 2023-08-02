@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_packages/hero_navigation.dart';
+import 'package:flutter_packages/routes.dart';
 
 class HeroAnimation extends StatefulWidget {
   const HeroAnimation({Key? key}) : super(key: key);
@@ -18,11 +19,8 @@ class _HeroAnimationState extends State<HeroAnimation> {
       body: Center(
         child: InkWell(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HeroNavigation(),
-                ));
+            Navigator.pushNamed(
+                context,Routes.heroNavigation);
           },
           child: Hero(
             tag: "First",

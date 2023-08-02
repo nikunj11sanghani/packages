@@ -1,33 +1,16 @@
 import 'dart:developer';
-import 'package:flutter_packages/screens/isolate_threads/isolate_screen.dart';
-import 'package:flutter_packages/screens/isolate_threads/thread_screen.dart';
-import 'package:flutter_packages/shimmer_task.dart';
-import 'package:flutter_packages/screens/isolate_threads/sliver_task.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 import 'package:local_auth_ios/local_auth_ios.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_packages/screens/animated_opacity_task.dart';
 import 'package:flutter_packages/widgets/button_file.dart';
-import 'package:flutter_packages/screens/cached_network.dart';
-import 'package:flutter_packages/screens/hero_animation.dart';
-import 'package:flutter_packages/screens/image_package.dart';
-import 'package:flutter_packages/screens/info_package.dart';
-import 'package:flutter_packages/screens/intl_package.dart';
-import 'package:flutter_packages/screens/launch_url.dart';
-import 'package:flutter_packages/screens/loading_package.dart';
-import 'package:flutter_packages/screens/local_auth_task.dart';
-import 'package:flutter_packages/screens/location_page.dart';
-import 'package:flutter_packages/screens/picker_file.dart';
-import 'package:flutter_packages/screens/player_video.dart';
-import 'package:flutter_packages/screens/store_file.dart';
-import 'package:flutter_packages/screens/tween_animation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../notificationservice/local_notification_service.dart';
+import '../routes.dart';
 
 class PickerImage extends StatefulWidget {
   const PickerImage({Key? key}) : super(key: key);
@@ -171,7 +154,7 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Image Picker"),
+        title: const Text("Flutter Packages"),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -180,66 +163,43 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
               ButtonFile(
                 btnText: 'Image Package',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ImagePackage()));
+                  Navigator.pushNamed(context, Routes.imagePackage);
                 },
               ),
               ButtonFile(
                 btnText: 'Video Player Page',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const PlayerVideo()));
+                  Navigator.pushNamed(context, Routes.playerVideo);
                 },
               ),
               ButtonFile(
                 btnText: 'Pick file',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const PickerFile()));
+                  Navigator.pushNamed(context, Routes.pickerFile);
                 },
               ),
               ButtonFile(
                 btnText: 'Path Provider',
                 btnTap: () {
                   FirebaseCrashlytics.instance.crash();
-
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const ProviderPath()));
                 },
               ),
               ButtonFile(
                 btnText: 'Launch URL Package',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LaunchUrl()));
+                  Navigator.pushNamed(context, Routes.launchUrl);
                 },
               ),
               ButtonFile(
                 btnText: 'Cached Network Image',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CachedNetwork()));
+                  Navigator.pushNamed(context, Routes.cachedNetwork);
                 },
               ),
               ButtonFile(
                 btnText: 'GeoLocator',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LocationPage()));
+                  Navigator.pushNamed(context, Routes.locationPage);
                 },
               ),
               ButtonFile(
@@ -253,64 +213,43 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
               ButtonFile(
                 btnText: 'Easy Loading',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoadingCustom()));
+                  Navigator.pushNamed(context, Routes.loadingCustom);
                 },
               ),
               ButtonFile(
                 btnText: 'Information',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const InfoPackages()));
+                  Navigator.pushNamed(context, Routes.infoPackages);
                 },
               ),
               ButtonFile(
                 btnText: 'Fire Store',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const StoreFile()));
+                  Navigator.pushNamed(context, Routes.storeFile);
                 },
               ),
               ButtonFile(
                 btnText: 'Intl Package',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const IntlPackage()));
+                  Navigator.pushNamed(context, Routes.intlPackage);
                 },
               ),
               ButtonFile(
                 btnText: 'Tween Animation',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TweenAnimation()));
+                  Navigator.pushNamed(context, Routes.tweenAnimation);
                 },
               ),
               ButtonFile(
                 btnText: 'HERO Animation',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HeroAnimation()));
+                  Navigator.pushNamed(context, Routes.heroAnimation);
                 },
               ),
               ButtonFile(
                 btnText: 'Animated Widgets',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AnimatedOpacityTask()));
+                  Navigator.pushNamed(context, Routes.animatedOpacityTask);
                 },
               ),
               Visibility(
@@ -321,10 +260,7 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                     bool isAvailable = await authenticate();
                     if (isAvailable) {
                       if (mounted) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LocalAuthTask()));
+                        Navigator.pushNamed(context, Routes.localAuthTask);
                       }
                     }
                   },
@@ -333,37 +269,25 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
               ButtonFile(
                 btnText: 'Sliver Task',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SliverTask()));
+                  Navigator.pushNamed(context, Routes.sliverTask);
                 },
               ),
               ButtonFile(
                 btnText: 'Shimmer Effect',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ShimmerTask()));
+                  Navigator.pushNamed(context, Routes.shimmerTask);
                 },
               ),
               ButtonFile(
                 btnText: 'Isolate',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const IsolateScreen()));
+                  Navigator.pushNamed(context, Routes.isolateScreen);
                 },
               ),
               ButtonFile(
                 btnText: 'Thread Screen',
                 btnTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ThreadScreen()));
+                  Navigator.pushNamed(context, Routes.threadScreen);
                 },
               ),
             ],

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_packages/routes.dart';
 import 'package:flutter_packages/widgets/button_file.dart';
 import 'package:flutter_packages/screens/image_store.dart';
 import 'package:flutter_packages/screens/signin_screen.dart';
@@ -206,21 +207,15 @@ class _StoreFileState extends State<StoreFile> {
                           ),
                           ButtonFile(
                             btnTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const StoredData()));
+                              Navigator.pushNamed(
+                                  context,Routes.storedData);
                             },
                             btnText: 'Show Data',
                           ),
                           ButtonFile(
                             btnTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ImageStore()));
+                              Navigator.pushNamed(
+                                  context,Routes.imageStore);
                             },
                             btnText: 'Add Image',
                           ),
