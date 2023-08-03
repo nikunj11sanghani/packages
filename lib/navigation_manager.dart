@@ -21,6 +21,8 @@ import 'package:flutter_packages/screens/local_auth_task.dart';
 import 'package:flutter_packages/screens/location_page.dart';
 import 'package:flutter_packages/screens/picker_file.dart';
 import 'package:flutter_packages/screens/player_video.dart';
+import 'package:flutter_packages/screens/sqflite_task/add_data.dart';
+import 'package:flutter_packages/screens/sqflite_task/data_screen.dart';
 import 'package:flutter_packages/screens/store_file.dart';
 import 'package:flutter_packages/screens/stored_data.dart';
 import 'package:flutter_packages/screens/tween_animation.dart';
@@ -205,6 +207,20 @@ class NavigationManager {
           settings: settings,
           builder: (context) {
             return const ImageStore();
+          },
+        );
+      case Routes.addData:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) {
+            return AddData();
+          },
+        );
+      case Routes.dataScreen:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) {
+            return const DataScreen();
           },
         );
       default:

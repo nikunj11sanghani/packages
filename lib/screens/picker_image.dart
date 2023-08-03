@@ -290,6 +290,12 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                   Navigator.pushNamed(context, Routes.threadScreen);
                 },
               ),
+              ButtonFile(
+                btnText: 'sqflite Database',
+                btnTap: () {
+                  Navigator.pushNamed(context, Routes.dataScreen);
+                },
+              ),
             ],
           ),
         ),

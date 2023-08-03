@@ -23,5 +23,7 @@ class Routes {
       heroNavigation = "heroNavigation",
       storedData = "storedData",
       imageStore = "imageStore",
+      addData = "addData",
+      dataScreen = "dataScreen",
       sliverPerformance = "sliverPerformance";
 }
