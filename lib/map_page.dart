@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as l;
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -12,11 +12,16 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  LatLng source = const LatLng(21.210164, 72.851522);
-  static const LatLng destination = LatLng(21.203813, 72.765026);
+  LatLng source = const LatLng(23.042553, 72.501352);
+  LatLng destination = const LatLng(23.042000, 72.498604);
+
+  LatLng currentLoc = const LatLng(0, 0);
+
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
 
   Future<void> askService() async {
-    Location location = Location();
+    l.Location location = l.Location();
     bool isServiceEnabled = await location.serviceEnabled();
     if (!isServiceEnabled) {
       isServiceEnabled = await location.requestService();
@@ -24,33 +29,35 @@ class _MapPageState extends State<MapPage> {
         return;
       }
     }
+
+    location.onLocationChanged.listen((l.LocationData locationData) {
+      setState(() {
+        currentLoc = LatLng(locationData.latitude!, locationData.longitude!);
+        marker.add(Marker(
+            markerId: const MarkerId("Current Location"),
+            position: currentLoc,
+            infoWindow: const InfoWindow(title: "placeMarks[0].street")));
+        moveCamera(currentLoc);
+      });
+    });
   }
 
-  Future<void> changePosition() async {
+  Future<void> moveCamera(LatLng latLng) async {
     final GoogleMapController controller = await _controller.future;
-    CameraPosition newCameraPosition =
-        const CameraPosition(target: destination, zoom: 15);
-    debugPrint("moving camera${destination.toString()}");
+    CameraPosition newCameraPosition = CameraPosition(target: latLng, zoom: 15);
+    debugPrint("moving camera${latLng.toString()}");
     await controller
         .animateCamera(CameraUpdate.newCameraPosition(newCameraPosition));
     setState(() {});
   }
 
-  final List<Marker> marker = [
-    const Marker(
-        markerId: MarkerId("1"), position: LatLng(21.210164, 72.851522)),
-    const Marker(
-        markerId: MarkerId("2"), position: LatLng(21.203813, 72.765026)),
-  ];
+  final List<Marker> marker = [];
 
   @override
   void initState() {
     askService();
     super.initState();
   }
-
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
 
   @override
   Widget build(BuildContext context) {
@@ -60,30 +67,28 @@ class _MapPageState extends State<MapPage> {
         title: const Text("Track"),
       ),
       body: GoogleMap(
+        onMapCreated: (controller) => _controller.complete(controller),
         onTap: (LatLng latLang) {
           setState(() {
             marker.add(Marker(
+                infoWindow: const InfoWindow(title: "Your  Destination"),
                 icon: BitmapDescriptor.defaultMarker,
-                markerId: MarkerId("${marker.length}"),
+                markerId: MarkerId("${marker.length + 1}"),
                 position: latLang));
+            destination = latLang;
             debugPrint(marker.length.toString());
           });
         },
-        polylines: {
-          Polyline(
-              polylineId: const PolylineId("route"),
-              points: [source, destination],
-              color: Colors.red,
-              width: 5),
-        },
         markers: Set<Marker>.of(marker),
-        initialCameraPosition: (const CameraPosition(
-            zoom: 15, target: LatLng(21.210164, 72.851522))),
+        initialCameraPosition: (CameraPosition(zoom: 15, target: currentLoc)),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: changePosition,
-        child: const Icon(Icons.search_outlined),
+        onPressed: () async {
+          moveCamera(currentLoc);
+          setState(() {});
+        },
+        child: const Icon(Icons.play_arrow),
       ),
     );
   }

@@ -13,10 +13,10 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
-  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   LocalNotificationService.initialize();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   runApp(const MyApp());
 }
 
@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
