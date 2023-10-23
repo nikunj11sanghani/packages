@@ -51,8 +51,6 @@ class _MapPageState extends State<MapPage> {
 
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-  TextEditingController latController = TextEditingController();
-  TextEditingController langController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,58 +59,26 @@ class _MapPageState extends State<MapPage> {
         centerTitle: true,
         title: const Text("Track"),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: latController,
-              decoration: const InputDecoration(
-                  hintText: "Latitude",
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.all(Radius.circular(5)))),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: langController,
-              decoration: const InputDecoration(
-                  hintText: "Longitude",
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.all(Radius.circular(5)))),
-            ),
-          ),
-          Expanded(
-            child: GoogleMap(
-              onTap: (LatLng latLang) {
-                setState(() {
-                  marker.add(Marker(
-                      icon: BitmapDescriptor.defaultMarker,
-                      markerId: MarkerId("${marker.length}"),
-                      position: latLang));
-                  debugPrint(marker.length.toString());
-                });
-              },
-              polylines: {
-                Polyline(
-                    polylineId: const PolylineId("route"),
-                    points: [source, destination],
-                    color: Colors.red,
-                    width: 5),
-              },
-              markers: Set<Marker>.of(marker),
-              initialCameraPosition: (const CameraPosition(
-                  zoom: 15, target: LatLng(21.210164, 72.851522))),
-            ),
-          ),
-        ],
+      body: GoogleMap(
+        onTap: (LatLng latLang) {
+          setState(() {
+            marker.add(Marker(
+                icon: BitmapDescriptor.defaultMarker,
+                markerId: MarkerId("${marker.length}"),
+                position: latLang));
+            debugPrint(marker.length.toString());
+          });
+        },
+        polylines: {
+          Polyline(
+              polylineId: const PolylineId("route"),
+              points: [source, destination],
+              color: Colors.red,
+              width: 5),
+        },
+        markers: Set<Marker>.of(marker),
+        initialCameraPosition: (const CameraPosition(
+            zoom: 15, target: LatLng(21.210164, 72.851522))),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton(
