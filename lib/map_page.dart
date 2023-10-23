@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as l;
 
@@ -13,13 +14,14 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  LatLng source = const LatLng(23.042553, 72.501352);
-  LatLng destination = const LatLng(23.042000, 72.498604);
+  // LatLng source = const LatLng(23.042553, 72.501352);
+  // LatLng destination = const LatLng(23.042000, 72.498604);
 
   LatLng currentLoc = const LatLng(0, 0);
-
+  bool hasChange = true;
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
+  String address = "";
 
   Future<void> askService() async {
     l.Location location = l.Location();
@@ -31,15 +33,15 @@ class _MapPageState extends State<MapPage> {
       }
     }
 
-    location.onLocationChanged.listen((l.LocationData locationData) {
-      setState(() {
-        currentLoc = LatLng(locationData.latitude!, locationData.longitude!);
-        marker.add(Marker(
-            markerId: const MarkerId("Current Location"),
-            position: currentLoc,
-            infoWindow: const InfoWindow(title: "Current Location")));
-        moveCamera(currentLoc);
-      });
+    Geolocator.getPositionStream().listen((Position currentLocation) {
+      if (hasChange) {
+        setState(() {
+          currentLoc =
+              LatLng(currentLocation.latitude, currentLocation.longitude);
+          debugPrint("$currentLoc");
+          moveCamera(currentLoc);
+        });
+      }
     });
   }
 
@@ -51,8 +53,6 @@ class _MapPageState extends State<MapPage> {
         .animateCamera(CameraUpdate.newCameraPosition(newCameraPosition));
     setState(() {});
   }
-
-  final List<Marker> marker = [];
 
   Future<String> getAddressFromLatLng(LatLng latLng) async {
     List<Placemark> placeMarks =
@@ -81,28 +81,22 @@ class _MapPageState extends State<MapPage> {
       body: GoogleMap(
         onMapCreated: (controller) => _controller.complete(controller),
         onTap: (LatLng latLang) async {
-          final address = await getAddressFromLatLng(latLang);
+          String newAddress = await getAddressFromLatLng(latLang);
           setState(() {
-            marker.add(Marker(
-                infoWindow:
-                    InfoWindow(title: "Your  Destination", snippet: address),
-                icon: BitmapDescriptor.defaultMarker,
-                markerId: MarkerId("${marker.length + 1}"),
-                position: latLang));
-            destination = latLang;
-            debugPrint(marker.length.toString());
+            hasChange = false;
+            currentLoc = latLang;
+            address = newAddress;
           });
-        },
-        markers: Set<Marker>.of(marker),
-        initialCameraPosition: (CameraPosition(zoom: 15, target: currentLoc)),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
           moveCamera(currentLoc);
-          setState(() {});
         },
-        child: const Icon(Icons.play_arrow),
+        markers: {
+          Marker(
+              markerId: const MarkerId("Current Location"),
+              position: currentLoc,
+              infoWindow:
+                  InfoWindow(snippet: address, title: "Current Location"))
+        },
+        initialCameraPosition: (CameraPosition(zoom: 15, target: currentLoc)),
       ),
     );
   }
