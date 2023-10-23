@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as l;
 
@@ -36,7 +37,7 @@ class _MapPageState extends State<MapPage> {
         marker.add(Marker(
             markerId: const MarkerId("Current Location"),
             position: currentLoc,
-            infoWindow: const InfoWindow(title: "placeMarks[0].street")));
+            infoWindow: const InfoWindow(title: "Current Location")));
         moveCamera(currentLoc);
       });
     });
@@ -53,6 +54,17 @@ class _MapPageState extends State<MapPage> {
 
   final List<Marker> marker = [];
 
+  Future<String> getAddressFromLatLng(LatLng latLng) async {
+    List<Placemark> placeMarks =
+        await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
+    if (placeMarks.isNotEmpty) {
+      Placemark first = placeMarks.first;
+      return "${first.name}, ${first.thoroughfare}, ${first.locality}, ${first.postalCode}, ${first.country}";
+    } else {
+      return 'Address not found';
+    }
+  }
+
   @override
   void initState() {
     askService();
@@ -68,10 +80,12 @@ class _MapPageState extends State<MapPage> {
       ),
       body: GoogleMap(
         onMapCreated: (controller) => _controller.complete(controller),
-        onTap: (LatLng latLang) {
+        onTap: (LatLng latLang) async {
+          final address = await getAddressFromLatLng(latLang);
           setState(() {
             marker.add(Marker(
-                infoWindow: const InfoWindow(title: "Your  Destination"),
+                infoWindow:
+                    InfoWindow(title: "Your  Destination", snippet: address),
                 icon: BitmapDescriptor.defaultMarker,
                 markerId: MarkerId("${marker.length + 1}"),
                 position: latLang));
