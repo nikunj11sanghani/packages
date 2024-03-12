@@ -124,103 +124,210 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
         title: const Text("Image Picker"),
       ),
       body: Center(
-        child: Column(
-          children: [
-            ButtonFile(
-              btnText: 'Image Package',
-              btnTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ImagePackage()));
-              },
-            ),
-            ButtonFile(
-              btnText: 'Video Player Page',
-              btnTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PlayerVideo()));
-              },
-            ),
-            ButtonFile(
-              btnText: 'Pick file',
-              btnTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PickerFile()));
-              },
-            ),
-            ButtonFile(
-              btnText: 'Path Provider',
-              btnTap: () {
-                FirebaseCrashlytics.instance.crash();
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ButtonFile(
+                btnText: 'Image Package',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ImagePackage()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'Video Player Page',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PlayerVideo()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'Pick file',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PickerFile()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'Path Provider',
+                btnTap: () {
+                  FirebaseCrashlytics.instance.crash();
 
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => const ProviderPath()));
-              },
-            ),
-            ButtonFile(
-              btnText: 'Launch URL Package',
-              btnTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const LaunchUrl()));
-              },
-            ),
-            ButtonFile(
-              btnText: 'Cached Network Image',
-              btnTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CachedNetwork()));
-              },
-            ),
-            ButtonFile(
-              btnText: 'GeoLocator',
-              btnTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LocationPage()));
-              },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ButtonFile(
-                  btnText: 'Default Toast',
-                  btnTap: defaultToast,
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => const ProviderPath()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'Launch URL Package',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LaunchUrl()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'Cached Network Image',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CachedNetwork()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'GeoLocator',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LocationPage()));
+                },
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ButtonFile(
+                    btnText: 'Default Toast',
+                    btnTap: defaultToast,
+                  ),
+                  ButtonFile(
+                    btnText: 'Custom Toast',
+                    btnTap: customToast,
+                  ),
+                ],
+              ),
+              ButtonFile(
+                btnText: 'Easy Loading',
+                btnTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoadingCustom()));
+                },
+              ),
+              ButtonFile(
+                btnText: 'Google Maps',
+                btnTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const MapPage()));
+                },
+              ),
+              SizedBox(
+                width: 300,
+                height: 200,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/images/home_bg.png",
+                        fit: BoxFit.fill, height: 100, width: 200),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("Universe Medicos"),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            RichText(
+                                text: const TextSpan(children: [
+                              TextSpan(
+                                  text: "Pharmacist -",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black)),
+                              TextSpan(
+                                  text: "Amit Sharma",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black))
+                            ])),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Icon(Icons.water_damage, color: Colors.green),
+                                Text("Available 5 out of 10")
+                              ],
+                            ),
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Icon(Icons.call,
+                                    color: Colors.deepPurpleAccent),
+                                Text("+91 9328646220")
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              width: 80,
+                              height: 30,
+                              decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  color: Colors.deepPurpleAccent),
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Call",
+                                      style: TextStyle(color: Colors.white)),
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Icon(
+                                    Icons.call,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Container(
+                              width: 80,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.deepPurpleAccent),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(3))),
+                              child: const Align(
+                                alignment: Alignment.center,
+                                child: Text("View Details",
+                                    style: TextStyle(
+                                        color: Colors.deepPurpleAccent,
+                                        fontSize: 13)),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
                 ),
-                ButtonFile(
-                  btnText: 'Custom Toast',
-                  btnTap: customToast,
-                ),
-              ],
-            ),
-            ButtonFile(
-              btnText: 'Easy Loading',
-              btnTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoadingCustom()));
-              },
-            ),
-            ButtonFile(
-              btnText: 'Google Maps',
-              btnTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const MapPage()));
-              },
-            ),
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -242,8 +349,8 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
       height: 50,
       decoration: BoxDecoration(
           color: Colors.deepOrange, borderRadius: BorderRadius.circular(10)),
-      child: Row(
-        children: const [Icon(Icons.done_all), Text("Custom Toast Message")],
+      child: const Row(
+        children: [Icon(Icons.done_all), Text("Custom Toast Message")],
       ),
     );
     fToast.showToast(child: toast, toastDuration: const Duration(seconds: 3));

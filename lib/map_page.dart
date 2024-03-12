@@ -14,10 +14,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  // LatLng source = const LatLng(23.042553, 72.501352);
-  // LatLng destination = const LatLng(23.042000, 72.498604);
-
-  LatLng currentLoc = const LatLng(0, 0);
+  LatLng currentLoc = const LatLng(23.042553, 72.501352);
   bool hasChange = true;
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
@@ -76,27 +73,71 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Track"),
+        title: const Text("Medical App"),
       ),
-      body: GoogleMap(
-        onMapCreated: (controller) => _controller.complete(controller),
-        onTap: (LatLng latLang) async {
-          String newAddress = await getAddressFromLatLng(latLang);
-          setState(() {
-            hasChange = false;
-            currentLoc = latLang;
-            address = newAddress;
-          });
-          moveCamera(currentLoc);
-        },
-        markers: {
-          Marker(
-              markerId: const MarkerId("Current Location"),
-              position: currentLoc,
-              infoWindow:
-                  InfoWindow(snippet: address, title: "Current Location"))
-        },
-        initialCameraPosition: (CameraPosition(zoom: 15, target: currentLoc)),
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          GoogleMap(
+            onMapCreated: (controller) => _controller.complete(controller),
+            onTap: (LatLng latLang) async {
+              String newAddress = await getAddressFromLatLng(latLang);
+              setState(() {
+                hasChange = false;
+                currentLoc = latLang;
+                address = newAddress;
+              });
+              moveCamera(currentLoc);
+            },
+            markers: {
+              Marker(
+                  markerId: const MarkerId("Current Location"),
+                  position: currentLoc,
+                  infoWindow:
+                      InfoWindow(snippet: address, title: "Current Location"))
+            },
+            initialCameraPosition:
+                (CameraPosition(zoom: 15, target: currentLoc)),
+          ),
+          SizedBox(
+            height: 200,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset("assets/images/home_bg.png",
+                    fit: BoxFit.contain, height: 100),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        const Text("Universe Medicos"),
+                        RichText(
+                            text: const TextSpan(children: [
+                          TextSpan(
+                              text: "Pharmacist -",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black)),
+                          TextSpan(
+                              text: "Amit Sharma",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black))
+                        ])),
+                        const Row(
+                          children: [
+                            Icon(Icons.water_damage),
+                            Text("Available 5 out of 10")
+                          ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
