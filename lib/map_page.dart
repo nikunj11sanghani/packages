@@ -80,7 +80,6 @@ class _MapPageState extends State<MapPage> {
         alignment: Alignment.bottomCenter,
         children: [
           GoogleMap(
-            zoomControlsEnabled: false,
             onMapCreated: (controller) => _controller.complete(controller),
             onTap: (LatLng latLang) async {
               String newAddress = await getAddressFromLatLng(latLang);
@@ -103,290 +102,303 @@ class _MapPageState extends State<MapPage> {
           ),
           CarouselSlider(
               items: [
-                SizedBox(
-                  width: 300,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    clipBehavior: Clip.hardEdge,
-                    elevation: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Stack(
-                          children: [
-                            Image.asset("assets/images/home_bg.png",
-                                fit: BoxFit.fill,
-                                height: 100,
-                                width: double.infinity),
-                            const CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Icon(Icons.directions,
-                                  color: Colors.orangeAccent),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text("Universe Medicos"),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  RichText(
-                                      text: const TextSpan(children: [
-                                    TextSpan(
-                                        text: "Pharmacist -",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w300,
-                                            color: Colors.black)),
-                                    TextSpan(
-                                        text: "Amit Sharma",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black))
-                                  ])),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(Icons.water_damage,
-                                          color: Colors.green),
-                                      Text("Available 5 out of 10")
-                                    ],
-                                  ),
-                                  const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(Icons.call,
-                                          color: Colors.deepPurpleAccent),
-                                      Text("+91 9328646220")
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: 80,
-                                    height: 30,
-                                    decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5)),
-                                        color: Colors.deepPurpleAccent),
-                                    child: const Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text("Call",
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                        SizedBox(
-                                          width: 2,
-                                        ),
-                                        Icon(
-                                          Icons.call,
-                                          color: Colors.white,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Container(
-                                    width: 80,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.deepPurpleAccent),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(3))),
-                                    child: const Align(
-                                      alignment: Alignment.center,
-                                      child: Text("View Details",
-                                          style: TextStyle(
-                                              color: Colors.deepPurpleAccent,
-                                              fontSize: 13)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 300,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    clipBehavior: Clip.hardEdge,
-                    elevation: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Image.asset("assets/images/home_bg.png",
-                                fit: BoxFit.fill,
-                                height: 100,
-                                width: double.infinity),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: CircleAvatar(
-                                    radius: 12,
-                                    backgroundColor: Colors.white,
-                                    child: Icon(Icons.directions,
-                                        color: Colors.orangeAccent, size: 18),
-                                  ),
+                Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  clipBehavior: Clip.hardEdge,
+                  elevation: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          Image.asset("assets/images/home_bg.png",
+                              fit: BoxFit.fill,
+                              height: 100,
+                              width: double.infinity),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: CircleAvatar(
+                                  radius: 12,
+                                  backgroundColor: Colors.white,
+                                  child: Icon(Icons.directions,
+                                      color: Colors.orangeAccent, size: 18),
                                 ),
-                                Card(
+                              ),
+                              SizedBox(
+                                width: 60,
+                                height: 30,
+                                child: Card(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8)),
+                                      borderRadius: BorderRadius.circular(10)),
                                   clipBehavior: Clip.hardEdge,
                                   elevation: 5,
-                                  child: const Text("Partial"),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text("Universe Medicos"),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  RichText(
-                                      text: const TextSpan(children: [
-                                    TextSpan(
-                                        text: "Pharmacist -",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w300,
-                                            color: Colors.black)),
-                                    TextSpan(
-                                        text: "Amit Sharma",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black))
-                                  ])),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(Icons.water_damage,
-                                          color: Colors.green),
-                                      Text("Available 5 out of 10")
-                                    ],
-                                  ),
-                                  const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(Icons.call,
-                                          color: Colors.deepPurpleAccent),
-                                      Text("+91 9328646220")
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: 80,
-                                    height: 30,
-                                    decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5)),
-                                        color: Colors.deepPurpleAccent),
-                                    child: const Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text("Call",
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                        SizedBox(
-                                          width: 2,
-                                        ),
-                                        Icon(
-                                          Icons.call,
-                                          color: Colors.white,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Container(
-                                    width: 80,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.deepPurpleAccent),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(3))),
-                                    child: const Align(
+                                  child: const Align(
                                       alignment: Alignment.center,
-                                      child: Text("View Details",
-                                          style: TextStyle(
-                                              color: Colors.deepPurpleAccent,
-                                              fontSize: 13)),
-                                    ),
+                                      child: Text("Partial")),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text("Universe Medicos"),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                RichText(
+                                    text: const TextSpan(children: [
+                                  TextSpan(
+                                      text: "Pharmacist -",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.black)),
+                                  TextSpan(
+                                      text: "Amit Sharma",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black))
+                                ])),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(Icons.water_damage,
+                                        color: Colors.green),
+                                    Text("Available 5 out of 10")
+                                  ],
+                                ),
+                                const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(Icons.call,
+                                        color: Colors.deepPurpleAccent),
+                                    Text("+91 9328646220")
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 80,
+                                  height: 30,
+                                  decoration: const BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)),
+                                      color: Colors.deepPurpleAccent),
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Call",
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      SizedBox(
+                                        width: 2,
+                                      ),
+                                      Icon(
+                                        Icons.call,
+                                        color: Colors.white,
+                                      )
+                                    ],
                                   ),
-                                ],
+                                ),
+                                const SizedBox(height: 10),
+                                Container(
+                                  width: 80,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.deepPurpleAccent),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(3))),
+                                  child: const Align(
+                                    alignment: Alignment.center,
+                                    child: Text("View Details",
+                                        style: TextStyle(
+                                            color: Colors.deepPurpleAccent,
+                                            fontSize: 13)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  clipBehavior: Clip.hardEdge,
+                  elevation: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          Image.asset("assets/images/home_bg.png",
+                              fit: BoxFit.fill,
+                              height: 100,
+                              width: double.infinity),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: CircleAvatar(
+                                  radius: 12,
+                                  backgroundColor: Colors.white,
+                                  child: Icon(Icons.directions,
+                                      color: Colors.orangeAccent, size: 18),
+                                ),
                               ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
+                              SizedBox(
+                                width: 60,
+                                height: 30,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  clipBehavior: Clip.hardEdge,
+                                  elevation: 5,
+                                  child: const Align(
+                                      alignment: Alignment.center,
+                                      child: Text("Partial")),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text("Universe Medicos"),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                RichText(
+                                    text: const TextSpan(children: [
+                                  TextSpan(
+                                      text: "Pharmacist -",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.black)),
+                                  TextSpan(
+                                      text: "Amit Sharma",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black))
+                                ])),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(Icons.water_damage,
+                                        color: Colors.green),
+                                    Text("Available 5 out of 10")
+                                  ],
+                                ),
+                                const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(Icons.call,
+                                        color: Colors.deepPurpleAccent),
+                                    Text("+91 9328646220")
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 80,
+                                  height: 30,
+                                  decoration: const BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)),
+                                      color: Colors.deepPurpleAccent),
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Call",
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      SizedBox(
+                                        width: 2,
+                                      ),
+                                      Icon(
+                                        Icons.call,
+                                        color: Colors.white,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Container(
+                                  width: 80,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.deepPurpleAccent),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(3))),
+                                  child: const Align(
+                                    alignment: Alignment.center,
+                                    child: Text("View Details",
+                                        style: TextStyle(
+                                            color: Colors.deepPurpleAccent,
+                                            fontSize: 13)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],
               options: CarouselOptions(
-                  viewportFraction: 1, autoPlay: false, height: 220))
+                viewportFraction: 0.9,
+                  aspectRatio: 2.0, autoPlay: false, height: 230))
         ],
       ),
     );
