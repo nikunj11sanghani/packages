@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -221,126 +222,263 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
                       MaterialPageRoute(builder: (context) => const MapPage()));
                 },
               ),
-              SizedBox(
-                width: 300,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  clipBehavior: Clip.hardEdge,
-                  elevation: 5,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset("assets/images/home_bg.png",
-                          fit: BoxFit.fill,
-                          height: 100,
-                          width: double.infinity),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text("Universe Medicos"),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                RichText(
-                                    text: const TextSpan(children: [
-                                  TextSpan(
-                                      text: "Pharmacist -",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w300,
-                                          color: Colors.black)),
-                                  TextSpan(
-                                      text: "Amit Sharma",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black))
-                                ])),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Icon(Icons.water_damage, color: Colors.green),
-                                    Text("Available 5 out of 10")
-                                  ],
-                                ),
-                                const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Icon(Icons.call,
-                                        color: Colors.deepPurpleAccent),
-                                    Text("+91 9328646220")
-                                  ],
-                                ),
-                              ],
+              CarouselSlider(
+                  items: [
+                    SizedBox(
+                      width: 300,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        clipBehavior: Clip.hardEdge,
+                        elevation: 5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset("assets/images/home_bg.png",
+                                fit: BoxFit.fill,
+                                height: 100,
+                                width: double.infinity),
+                            const SizedBox(
+                              height: 5,
                             ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  width: 80,
-                                  height: 30,
-                                  decoration: const BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5)),
-                                      color: Colors.deepPurpleAccent),
-                                  child: const Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text("Call",
-                                          style: TextStyle(color: Colors.white)),
-                                      SizedBox(
-                                        width: 2,
+                                      const Text("Universe Medicos"),
+                                      const SizedBox(
+                                        height: 5,
                                       ),
-                                      Icon(
-                                        Icons.call,
-                                        color: Colors.white,
-                                      )
+                                      RichText(
+                                          text: const TextSpan(children: [
+                                        TextSpan(
+                                            text: "Pharmacist -",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.black)),
+                                        TextSpan(
+                                            text: "Amit Sharma",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black))
+                                      ])),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Icon(Icons.water_damage,
+                                              color: Colors.green),
+                                          Text("Available 5 out of 10")
+                                        ],
+                                      ),
+                                      const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Icon(Icons.call,
+                                              color: Colors.deepPurpleAccent),
+                                          Text("+91 9328646220")
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),
-                                const SizedBox(height: 10),
-                                Container(
-                                  width: 80,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.deepPurpleAccent),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(3))),
-                                  child: const Align(
-                                    alignment: Alignment.center,
-                                    child: Text("View Details",
-                                        style: TextStyle(
-                                            color: Colors.deepPurpleAccent,
-                                            fontSize: 13)),
-                                  ),
+                                const SizedBox(
+                                  width: 10,
                                 ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: 80,
+                                        height: 30,
+                                        decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(5)),
+                                            color: Colors.deepPurpleAccent),
+                                        child: const Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text("Call",
+                                                style: TextStyle(
+                                                    color: Colors.white)),
+                                            SizedBox(
+                                              width: 2,
+                                            ),
+                                            Icon(
+                                              Icons.call,
+                                              color: Colors.white,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Container(
+                                        width: 80,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.deepPurpleAccent),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(3))),
+                                        child: const Align(
+                                          alignment: Alignment.center,
+                                          child: Text("View Details",
+                                              style: TextStyle(
+                                                  color:
+                                                      Colors.deepPurpleAccent,
+                                                  fontSize: 13)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
-                          )
-                        ],
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              )
+                    ),
+                    SizedBox(
+                      width: 300,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        clipBehavior: Clip.hardEdge,
+                        elevation: 5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset("assets/images/home_bg.png",
+                                fit: BoxFit.fill,
+                                height: 100,
+                                width: double.infinity),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text("Universe Medicos"),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      RichText(
+                                          text: const TextSpan(children: [
+                                        TextSpan(
+                                            text: "Pharmacist -",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.black)),
+                                        TextSpan(
+                                            text: "Amit Sharma",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black))
+                                      ])),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Icon(Icons.water_damage,
+                                              color: Colors.green),
+                                          Text("Available 5 out of 10")
+                                        ],
+                                      ),
+                                      const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Icon(Icons.call,
+                                              color: Colors.deepPurpleAccent),
+                                          Text("+91 9328646220")
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: 80,
+                                        height: 30,
+                                        decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(5)),
+                                            color: Colors.deepPurpleAccent),
+                                        child: const Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text("Call",
+                                                style: TextStyle(
+                                                    color: Colors.white)),
+                                            SizedBox(
+                                              width: 2,
+                                            ),
+                                            Icon(
+                                              Icons.call,
+                                              color: Colors.white,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Container(
+                                        width: 80,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.deepPurpleAccent),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(3))),
+                                        child: const Align(
+                                          alignment: Alignment.center,
+                                          child: Text("View Details",
+                                              style: TextStyle(
+                                                  color:
+                                                      Colors.deepPurpleAccent,
+                                                  fontSize: 13)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                  options: CarouselOptions(
+                      viewportFraction: 1, autoPlay: false, height: 302))
             ],
           ),
         ),
