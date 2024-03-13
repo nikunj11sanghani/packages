@@ -223,107 +223,122 @@ class _PickerImageState extends State<PickerImage> with WidgetsBindingObserver {
               ),
               SizedBox(
                 width: 300,
-                height: 200,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset("assets/images/home_bg.png",
-                        fit: BoxFit.fill, height: 100, width: 200),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text("Universe Medicos"),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            RichText(
-                                text: const TextSpan(children: [
-                              TextSpan(
-                                  text: "Pharmacist -",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w300,
-                                      color: Colors.black)),
-                              TextSpan(
-                                  text: "Amit Sharma",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black))
-                            ])),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  clipBehavior: Clip.hardEdge,
+                  elevation: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/images/home_bg.png",
+                          fit: BoxFit.fill,
+                          height: 100,
+                          width: double.infinity),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(Icons.water_damage, color: Colors.green),
-                                Text("Available 5 out of 10")
+                                const Text("Universe Medicos"),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                RichText(
+                                    text: const TextSpan(children: [
+                                  TextSpan(
+                                      text: "Pharmacist -",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.black)),
+                                  TextSpan(
+                                      text: "Amit Sharma",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black))
+                                ])),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(Icons.water_damage, color: Colors.green),
+                                    Text("Available 5 out of 10")
+                                  ],
+                                ),
+                                const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(Icons.call,
+                                        color: Colors.deepPurpleAccent),
+                                    Text("+91 9328646220")
+                                  ],
+                                ),
                               ],
                             ),
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
                               children: [
-                                Icon(Icons.call,
-                                    color: Colors.deepPurpleAccent),
-                                Text("+91 9328646220")
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          children: [
-                            Container(
-                              width: 80,
-                              height: 30,
-                              decoration: const BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
-                                  color: Colors.deepPurpleAccent),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Call",
-                                      style: TextStyle(color: Colors.white)),
-                                  SizedBox(
-                                    width: 2,
-                                  ),
-                                  Icon(
-                                    Icons.call,
-                                    color: Colors.white,
-                                  )
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Container(
-                              width: 80,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
+                                Container(
+                                  width: 80,
+                                  height: 30,
+                                  decoration: const BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)),
                                       color: Colors.deepPurpleAccent),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(3))),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("View Details",
-                                    style: TextStyle(
-                                        color: Colors.deepPurpleAccent,
-                                        fontSize: 13)),
-                              ),
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Call",
+                                          style: TextStyle(color: Colors.white)),
+                                      SizedBox(
+                                        width: 2,
+                                      ),
+                                      Icon(
+                                        Icons.call,
+                                        color: Colors.white,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Container(
+                                  width: 80,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.deepPurpleAccent),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(3))),
+                                  child: const Align(
+                                    alignment: Alignment.center,
+                                    child: Text("View Details",
+                                        style: TextStyle(
+                                            color: Colors.deepPurpleAccent,
+                                            fontSize: 13)),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],
